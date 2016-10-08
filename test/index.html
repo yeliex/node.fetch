@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+
+<script src="../dist/index.browser.js"></script>
+<script>
+  fetch.baseHost('http://qq.com');
+
+  fetch('http://qq.com').then((response)=>{
+    console.log(response)
+  }).catch((e)=>{
+    console.log(e)
+  })
+</script>
+
+</body>
+</html>
