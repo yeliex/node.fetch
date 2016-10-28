@@ -7,7 +7,7 @@ const parseUrl = (url, { ssl, method, body, query }, baseHost) => {
     url = baseHost(url);
   }
   if (typeof baseHost === 'string') {
-    url.replace(/^\/\//, baseHost);
+    url = url.replace(/^\/\//, baseHost);
   }
   if (/^\/\//.test(url)) {
     url = `${ssl ? 'https' : 'http'}:${url}`;
