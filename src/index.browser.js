@@ -5,7 +5,7 @@ let globalCallback = response => response;
 let baseHost = '';
 
 const fetchRequest = (url, options = {}, ...extras) => {
-  return realFetch.call(this, parseUrl(url, options), options, ...extras).then(responseMiddleware).then(globalCallback);
+  return realFetch.call(this, parseUrl(url, options, baseHost), options, ...extras).then(responseMiddleware).then(globalCallback);
 };
 
 fetchRequest.callback = (callback) => {
