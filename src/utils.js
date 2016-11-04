@@ -13,7 +13,8 @@ const parseUrl = (url, { ssl, method, body, query }, baseHost) => {
     url = `${ssl ? 'https' : 'http'}:${url}`;
   }
   if ((typeof body === 'object' || typeof query === 'object') && (!method || method === 'GET')) {
-    url += `${url.match(/\?/) ? '' : '?'}${Object.keys(query || body).map(key => `${key}=${body[key]}`).join('&')}`
+    const params = query || body;
+    url += `${url.match(/\?/) ? '' : '?'}${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`
   }
 
   return url;
