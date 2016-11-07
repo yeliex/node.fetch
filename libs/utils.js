@@ -1,3 +1,5 @@
+const qs = require('qs');
+
 const responseMiddleware = (response) => {
   return response;
 };
@@ -21,12 +23,7 @@ const parseUrl = (url, { ssl, method, body, query }, baseHost) => {
 };
 
 const toFormData = (obj = {}) => {
-  const form = new FormData();
-  Object.keys(obj).forEach((key) => {
-    form.append(key, obj[key]);
-  });
-
-  return form;
+  return qs.stringify(obj);
 };
 
 module.exports = {
