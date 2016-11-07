@@ -16,7 +16,7 @@ const fetchRequest = (url, options = {}, ...extras) => {
   options.headers = options.headers || {};
   if (options.headers['Content-Type'] !== 'application/json' && !(options.body instanceof FormData)) {
     // convert to FormData
-    options.body = toFormData(body);
+    options.body = toFormData(options.body);
   }
 
   return realFetch.call(this, parseUrl(url, options, baseHost), options, ...extras).then(responseMiddleware).then(globalCallback);
