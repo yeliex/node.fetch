@@ -20,14 +20,14 @@ const parseUrl = (url, { ssl, method, body, query }, baseHost) => {
   return url;
 };
 
-const toFormData = (obj) => {
+const toFormData = (obj = {}) => {
   const form = new FormData();
-  Object.keys(obj).forEach((key)=> {
+  Object.keys(obj).forEach((key) => {
     form.append(key, obj[key]);
   });
 
   return form;
-}
+};
 
 module.exports = {
   parseUrl,
