@@ -14,8 +14,8 @@ const parseUrl = (url, { ssl, method, body, query }, baseHost) => {
   if (/^\/\//.test(url)) {
     url = `${ssl ? 'https' : 'http'}:${url}`;
   }
-  if ((typeof body === 'object' || typeof query === 'object') && (!method || method === 'GET')) {
-    const params = query || body;
+  if ((typeof body === 'object' || typeof query === 'object') && (!method || method === 'GET' || method === 'HEAD')) {
+    const params = query || body || {};
     url += `${url.match(/\?/) ? '' : '?'}${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`
   }
 

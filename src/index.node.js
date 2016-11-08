@@ -21,10 +21,9 @@ const fetchRequest = (url, options = {}, ...extras) => {
     options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
   }
 
-  if ((!options.method || options.method === 'GET' || options.method === 'HEAD') && options.body) {
+  if ((!options.method || options.method === 'GET' || options.method === 'HEAD') && (!!options.body || options.body === '' )) {
     delete options.body;
   }
-
   return realFetch.call(this, parseUrl(url, options, baseHost), options, ...extras).then(responseMiddleware).then(globalCallback);
 };
 
