@@ -5,10 +5,10 @@ let globalCallback = response => response;
 let baseHost = '';
 
 const fetchRequest = (url, options = {}, ...extras) => {
-  options.data ? options.method === 'GET' ? options.query = { ...(options.query || {}), ...options.data } : options.body = { ...(options.body || {}), ...options.data } : '';
+  options.data ? (options.method === 'GET' || options.method === 'HEAD') ? options.query = { ...(options.query || {}), ...options.data } : options.body = { ...(options.body || {}), ...options.data } : '';
 
   if (!options.method || options.method === 'GET') {
-    options.body = options.body || options.data;
+    options.query = options.body || options.data;
   }
 
   // use object insteadof Header temporary
@@ -17,6 +17,10 @@ const fetchRequest = (url, options = {}, ...extras) => {
     // convert to FormData
     options.body = toFormData(options.body);
     options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+  }
+
+  if ((!options.method || options.method === 'GET' || options.method === 'HEAD') && options.body) {
+    delete options.body;
   }
 
   return realFetch.call(this, parseUrl(url, options, baseHost), options, ...extras).then(responseMiddleware).then(globalCallback);
