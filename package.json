@@ -5,7 +5,9 @@
   "main": "src/index.node.js",
   "browser": "dist/index.browser.js",
   "scripts": {
-    "build": "webpack",
+    "prebuild": "npm run build:dep",
+    "build": "webpack --config=webpack.config.js",
+    "build:dep": "webpack --config=webpack.config.dep.js",
     "prepublish": "npm run build",
     "publish": "rm -rf dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -43,14 +45,6 @@
     "koa-body": "^1.6.0",
     "koa-router": "^5.4.0",
     "webpack": "^1.13.2"
-  },
-  "babel": {
-    "presets": [
-      "es2015"
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
