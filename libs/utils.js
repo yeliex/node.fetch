@@ -51,10 +51,10 @@ const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, h
     ...extras
   };
 
-  return {
-    url: parseUrl(url, options, baseHost),
+  return [
+    parseUrl(url, options, baseHost),
     options
-  };
+  ];
 };
 
 const fetchDecorator = (realFetch) => {
