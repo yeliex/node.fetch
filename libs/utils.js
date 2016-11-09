@@ -43,15 +43,17 @@ const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, h
   // handle Content-Type when not GET
   !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(body)) && (body = qs.stringify(body)) : '';
 
+  const options = {
+    method,
+    query,
+    ...(!isGet ? body : {}),
+    headers,
+    ...extras
+  };
+
   return {
     url: parseUrl(url, options, baseHost),
-    options: {
-      method,
-      query,
-      ...(!isGet ? body : {}),
-      headers,
-      ...extras
-    }
+    options
   };
 };
 
