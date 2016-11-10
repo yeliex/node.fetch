@@ -19,3 +19,5 @@ const mime = (data, json) => {
   }
   return types.text;
 };
+
+module.exports = mime;
