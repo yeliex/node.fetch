@@ -1,5 +1,6 @@
 const qs = require('qs');
 const mime = require('../libs/mime');
+const mimetypes = require('./mime-types');
 
 let globalCallback = response => response;
 let baseHost = '';
@@ -41,7 +42,27 @@ const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, h
   headers = new Headers(headers);
 
   // handle Content-Type when not GET
-  !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(body)) && (body = qs.stringify(body)) : '';
+  !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(body)) : '';
+
+  if (typeof body === 'object') {
+    switch (headers.get('Content-Type')) {
+      case mimetypes.form: {
+        body = qs.stringify(body);
+        break;
+      }
+      case mimetypes.formData: {
+        const form = new FormData();
+        Object.keys(body).forEach((key) => {
+          form.set(key, body[key]);
+        });
+        body = form;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
 
   const options = {
     method,
