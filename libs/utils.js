@@ -46,10 +46,13 @@ const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, h
   const options = {
     method,
     query,
-    ...(!isGet ? body : {}),
     headers,
     ...extras
   };
+
+  if (!isGet) {
+    options.body = body;
+  }
 
   return [
     parseUrl(url, options, baseHost),
