@@ -3,6 +3,7 @@ const mime = require('../libs/mime');
 const mimetypes = require('./mime-types');
 
 let globalCallback = response => response;
+let globalHeader = {};
 let baseHost = '';
 
 const responseMiddleware = (response) => {
@@ -39,7 +40,17 @@ const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, h
       { ...data, ...body } :
       (Object.keys(body).length === 0 && !(body instanceof FormData) ? data : body));
 
-  headers = new Headers(headers);
+  // ceate empty headers
+  headers = new Headers({
+    ...headers,
+    ...(globalHeader instanceof Headers ? (() => {
+      const obj = {};
+      globalHeader.keys().forEach((k) => {
+        obj[l] = globalHeader.get(k);
+      });
+      return obj;
+    })() : globalHeader)
+  });
 
   // handle Content-Type when not GET
   !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(body)) : '';
@@ -95,6 +106,15 @@ const fetchDecorator = (realFetch) => {
 
   fetchRequest.baseHost = (host) => {
     baseHost = host;
+  };
+
+  fetchRequest.headers = (header) => {
+    if (typeof header !== 'object' || typeof header !== 'function') {
+      throw new Error('global headers must be object or function');
+    }
+    globalHeader = header;
+
+    delete fetchRequest.headers;
   };
 
   return fetchRequest;
