@@ -109,7 +109,7 @@ const fetchDecorator = (realFetch) => {
   };
 
   fetchRequest.headers = (header) => {
-    if (typeof header !== 'object' || typeof header !== 'function') {
+    if (typeof header !== 'object' && typeof header !== 'function') {
       throw new Error('global headers must be object or function');
     }
     globalHeader = header;
