@@ -10,6 +10,15 @@ const responseMiddleware = (response) => {
   return response;
 };
 
+const headersToObject = (headers) => {
+  return headers instanceof Headers ? (() => {
+    return Array.from(headers.keys()).reduce((previous, currentKey) => {
+      previous[currentKey] = headers.get(currentKey);
+      return previous;
+    }, {})
+  })() : headers;
+};
+
 const parseUrl = (url, options, baseHost) => {
   const { ssl, method, query } = options;
   if (typeof baseHost === 'function') {
@@ -40,16 +49,9 @@ const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, h
       { ...data, ...body } :
       (Object.keys(body).length === 0 && !(body instanceof FormData) ? data : body));
 
-  // ceate empty headers
   headers = new Headers({
-    ...headers,
-    ...(globalHeader instanceof Headers ? (() => {
-      const obj = {};
-      globalHeader.keys().forEach((k) => {
-        obj[l] = globalHeader.get(k);
-      });
-      return obj;
-    })() : globalHeader)
+    ...headersToObject(headers),
+    ...headersToObject(globalHeader)
   });
 
   // handle Content-Type when not GET
