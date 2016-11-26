@@ -41,13 +41,14 @@ const parseUrl = (url, options, baseHost) => {
 const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, headers = {}, json = false, ...extras } = {}) => {
   const isGet = method === 'GET' || method === 'HEAD';
 
-  isGet ?
-    (query = typeof query === 'object' ?
-      { ...query, ...data, ...body } :
-      (Object.keys(query).length === 0 ? data : query)) :
-    (body = typeof body === 'object' && !(body instanceof FormData) ?
+  const bodyIsFormData = window ? body instanceof FormData : false;
+
+  isGet ? (query = typeof query === 'object' ?
+    { ...query, ...data, ...body } :
+    (Object.keys(query).length === 0 ? data : query)) :
+    (body = typeof body === 'object' && !bodyIsFormData ?
       { ...data, ...body } :
-      (Object.keys(body).length === 0 && !(body instanceof FormData) ? data : body));
+      (Object.keys(body).length === 0 && !bodyIsFormData ? data : body));
 
   headers = new Headers({
     ...headersToObject(headers),
