@@ -3,4 +3,8 @@
 const realFetch = require('isomorphic-fetch/fetch-npm-node.js');
 const { fetchDecorator } = require('./../dist/utils');
 
-module.exports = fetchDecorator(realFetch);
+const fetch = fetchDecorator(realFetch);
+
+fetch.fetch = fetch;
+
+module.exports = fetch;
