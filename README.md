@@ -9,6 +9,12 @@ fetch api with customer auto pre actions
 $ npm install autoFetch
 ```
 
+## Why Not `isomorphic-fetch`
+- More api for node env
+  - Headers.keys
+  - Headers.values
+- global baseHost,callback,headers,queries and url params
+
 ## Usage
 ```js
 require('autoFetch');
@@ -28,4 +34,5 @@ fetch.callback((response)=>{
   return response;
 });
 ````
-
+## Contribution
+PR and issue welcome
