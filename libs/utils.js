@@ -12,11 +12,11 @@ const responseMiddleware = (response) => {
 
 const headersToObject = (headers) => {
   return headers instanceof Headers ? (() => {
-    return Array.from(headers.keys()).reduce((previous, currentKey) => {
-      previous[currentKey] = headers.get(currentKey);
-      return previous;
-    }, {})
-  })() : headers;
+      return Array.from(headers.keys()).reduce((previous, currentKey) => {
+        previous[currentKey] = headers.get(currentKey);
+        return previous;
+      }, {})
+    })() : headers;
 };
 
 const parseUrl = (url, options, baseHost) => {
@@ -41,11 +41,11 @@ const parseUrl = (url, options, baseHost) => {
 const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, headers = {}, json = false, ...extras } = {}) => {
   const isGet = method === 'GET' || method === 'HEAD';
 
-  const bodyIsFormData = typeof window !== 'undefined' ? body instanceof FormData : false;
+  const bodyIsFormData = typeof window !== 'undefined' && typeof FormData !== 'undefined' ? body instanceof FormData : false;
 
   isGet ? (query = typeof query === 'object' ?
-    { ...query, ...data, ...body } :
-    (Object.keys(query).length === 0 ? data : query)) :
+      { ...query, ...data, ...body } :
+      (Object.keys(query).length === 0 ? data : query)) :
     (body = typeof body === 'object' && !bodyIsFormData ?
       { ...data, ...body } :
       (Object.keys(body).length === 0 && !bodyIsFormData ? data : body));
