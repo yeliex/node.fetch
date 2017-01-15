@@ -2,7 +2,7 @@ const types = require('./mime-types');
 
 // detect mime type with data
 const mime = (data, json) => {
-  if (typeof window !== 'undefined' && data instanceof FormData) {
+  if (typeof window !== 'undefined' && typeof FormData !== 'undefined' && data instanceof FormData) {
     return types.formData;
   }
   if (typeof data === 'string') {
