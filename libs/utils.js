@@ -2,6 +2,17 @@ const qs = require('qs');
 const mime = require('../libs/mime');
 const mimetypes = require('./mime-types');
 
+const root = typeof window === 'object' ? window : global;
+root.Headers.prototype.keys = global.Headers.prototype.keys ||
+  function () {
+    return Object.keys(this._headers || {});
+  };
+
+root.Headers.prototype.values = global.Headers.prototype.values ||
+  function () {
+    return Object.keys(this._headers || {}).map((key) => this._headers[k]);
+  };
+
 let globalCallback = response => response;
 let globalHeader = {};
 let baseHost = '';
