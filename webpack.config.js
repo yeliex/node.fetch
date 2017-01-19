@@ -2,7 +2,8 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    "index.browser": './src/index.browser.js'
+    "utils": ['./libs/utils.js'],
+    "index.browser": ['./src/index.browser.js']
   },
   output: {
     path: require('path').join(__dirname, '/dist'),
