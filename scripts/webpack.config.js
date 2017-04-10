@@ -6,7 +6,7 @@ module.exports = {
     "index.browser": ['./src/index.browser.js']
   },
   output: {
-    path: require('path').join(__dirname, '/dist'),
+    path: require('path').join(__dirname, '../dist'),
     filename: "[name].js",
     libraryTarget: "umd"
   },
