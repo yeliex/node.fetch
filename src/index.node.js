@@ -1,9 +1,8 @@
 "use strict";
 
 const realFetch = require('isomorphic-fetch/fetch-npm-node.js');
-require('../libs/polyfill')(global);
 
-const { fetchDecorator } = require('./../dist/utils');
+const { fetchDecorator } = require('./../libs/utils');
 
 const fetch = fetchDecorator(realFetch);
 

@@ -12,11 +12,11 @@ const responseMiddleware = (response) => {
 
 const headersToObject = (headers) => {
   return headers instanceof Headers ? (() => {
-      return Array.from(headers.keys()).reduce((previous, currentKey) => {
-        previous[currentKey] = headers.get(currentKey);
-        return previous;
-      }, {})
-    })() : headers;
+    return Array.from(headers.keys()).reduce((previous, currentKey) => {
+      previous[currentKey] = headers.get(currentKey);
+      return previous;
+    }, {})
+  })() : headers;
 };
 
 const parseUrl = (url, options, baseHost) => {
@@ -38,38 +38,33 @@ const parseUrl = (url, options, baseHost) => {
   return url;
 };
 
-const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, headers = {}, json = false, ...extras } = {}) => {
-  const isGet = method === 'GET' || method === 'HEAD';
+const parseRequest = (url, options = { method: 'GET' }) => {
+  const isGet = options.method === 'GET' || options.method === 'HEAD';
 
-  const bodyIsFormData = typeof window !== 'undefined' && typeof FormData !== 'undefined' ? body instanceof FormData : false;
+  if (isGet && !options.query && options.data) {
+    options.query = options.data;
+  }
+  if (!isGet && !options.body && options.data) {
+    options.body = options.data;
+  }
 
-  isGet ? (query = typeof query === 'object' ?
-      { ...query, ...data, ...body } :
-      (Object.keys(query).length === 0 ? data : query)) :
-    (body = typeof body === 'object' && !bodyIsFormData ?
-      { ...data, ...body } :
-      (Object.keys(body).length === 0 && !bodyIsFormData ? data : body));
-
-  headers = new Headers({
-    ...headersToObject(headers),
-    ...headersToObject(globalHeader)
-  });
+  const headers = new Headers(Object.assign({}, headersToObject(options.headers), headersToObject(globalHeader)));
 
   // handle Content-Type when not GET
-  !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(body)) : '';
+  !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(options.body)) : '';
 
-  if (typeof body === 'object') {
+  if (typeof options.body === 'object') {
     switch (headers.get('Content-Type')) {
       case mimetypes.form: {
-        body = qs.stringify(body);
+        options.body = qs.stringify(options.body);
         break;
       }
       case mimetypes.formData: {
         const form = new FormData();
-        Object.keys(body).forEach((key) => {
-          form.set(key, body[key]);
+        Object.keys(options.body).forEach((key) => {
+          form.set(key, options.body[key]);
         });
-        body = form;
+        options.body = form;
         break;
       }
       default: {
@@ -78,16 +73,7 @@ const parseRequest = (url, { method = 'GET', query = {}, data = {}, body = {}, h
     }
   }
 
-  const options = {
-    method,
-    query,
-    headers,
-    ...extras
-  };
-
-  if (!isGet) {
-    options.body = body;
-  }
+  options.headers = headers;
 
   return [
     parseUrl(url, options, baseHost),
@@ -109,6 +95,8 @@ const fetchDecorator = (realFetch) => {
 
   fetchRequest.baseHost = (host) => {
     baseHost = host;
+
+    delete fetchRequest.baseHost;
   };
 
   fetchRequest.headers = (header) => {

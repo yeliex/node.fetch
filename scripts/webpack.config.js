@@ -2,7 +2,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    "utils": ['./libs/utils.js'],
+    "index.node": ['./src/index.browser.js'],
     "index.browser": ['./src/index.browser.js']
   },
   output: {
