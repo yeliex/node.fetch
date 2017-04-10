@@ -68,6 +68,7 @@ const parseRequest = (url, options = { method: 'GET' }) => {
         break;
       }
       default: {
+        options.body = JSON.stringify(options.body);
         break;
       }
     }

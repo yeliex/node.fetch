@@ -5,7 +5,7 @@
   "main": "src/index.node.js",
   "browser": "dist/index.browser.js",
   "scripts": {
-    "build": "webpack --config=webpack.config.js",
+    "build": "webpack --config=scripts/webpack.config.js",
     "prepublish": "npm run build",
     "publish": "rm -rf dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
