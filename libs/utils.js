@@ -41,6 +41,8 @@ const parseUrl = (url, options, baseHost) => {
 const parseRequest = (url, options = { method: 'GET' }) => {
   const isGet = options.method === 'GET' || options.method === 'HEAD';
 
+  options.json = options.json === false ? options.json : true;
+
   if (isGet && !options.query && options.data) {
     options.query = options.data;
   }
@@ -51,7 +53,7 @@ const parseRequest = (url, options = { method: 'GET' }) => {
   const headers = new Headers(Object.assign({}, headersToObject(options.headers), headersToObject(globalHeader)));
 
   // handle Content-Type when not GET
-  !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(options.body)) : '';
+  !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(options.body, options.json)) : '';
 
   if (typeof options.body === 'object') {
     switch (headers.get('Content-Type')) {

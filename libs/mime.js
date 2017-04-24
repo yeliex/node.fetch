@@ -15,7 +15,7 @@ const mime = (data, json) => {
     }
   }
   if (typeof data === 'object') {
-    return json ? types.json : types.form;
+    return json !== false ? types.json : types.form;
   }
   return types.text;
 };
