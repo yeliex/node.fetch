@@ -50,7 +50,7 @@ const parseRequest = (url, options = { method: 'GET' }) => {
     options.body = options.data;
   }
 
-  const headers = new Headers(Object.assign({}, headersToObject(options.headers), headersToObject(globalHeader)));
+  const headers = new Headers(Object.assign({}, headersToObject(globalHeader), headersToObject(options.headers)));
 
   // handle Content-Type when not GET
   !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(options.body, options.json)) : '';
