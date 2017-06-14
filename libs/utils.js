@@ -52,26 +52,19 @@ const parseRequest = (url, options = { method: 'GET' }) => {
 
   const headers = new Headers(Object.assign({}, headersToObject(globalHeader), headersToObject(options.headers)));
 
-  // handle Content-Type when not GET
-  !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(options.body, options.json)) : '';
-
-  if (typeof options.body === 'object') {
-    switch (headers.get('Content-Type')) {
-      case mimetypes.form: {
-        options.body = qs.stringify(options.body);
-        break;
-      }
-      case mimetypes.formData: {
-        const form = new FormData();
-        Object.keys(options.body).forEach((key) => {
-          form.set(key, options.body[key]);
-        });
-        options.body = form;
-        break;
-      }
-      default: {
-        options.body = JSON.stringify(options.body);
-        break;
+  if (!(options.body instanceof FormData)) {
+    // handle Content-Type when not GET
+    !isGet ? headers.set('Content-Type', headers.get('Content-Type') || mime(options.body, options.json)) : '';
+    if (typeof options.body === 'object') {
+      switch (headers.get('Content-Type')) {
+        case mimetypes.form: {
+          options.body = qs.stringify(options.body);
+          break;
+        }
+        default: {
+          options.body = JSON.stringify(options.body);
+          break;
+        }
       }
     }
   }
