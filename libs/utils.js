@@ -64,7 +64,7 @@ const parseRequest = (url, options = { method: 'GET' }) => {
   }
   if (isGet && options.body) {
     console.warn(`[Autofetch]: Request with GET/HEAD method cannot have body, ingored.`);
-    options.body = null;
+    delete options.body;
   }
 
   options.params = Object.assign({}, globalParams, options.params);
