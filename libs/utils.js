@@ -50,6 +50,8 @@ const parseUrl = (url, options, baseHost) => {
 };
 
 const parseRequest = (url, options = { method: 'GET' }) => {
+  options.method = options.method.toUpperCase();
+
   const isGet = options.method === 'GET' || options.method === 'HEAD';
 
   options.json = options.json === false ? options.json : true;
