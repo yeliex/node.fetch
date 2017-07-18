@@ -29,6 +29,8 @@ fetch.baseHost((url)=>{
 
 fetch('//path'); // http://domain.com/path;
 
+fetch('//user/:id',{ params: { id: 123 } }); // http://domain.com/user/123
+
 fetch.callback((response)=>{
   console.log(response);
   return response;

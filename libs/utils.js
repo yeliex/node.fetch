@@ -5,6 +5,8 @@ const mimetypes = require('./mime-types');
 let globalCallback = response => response;
 let globalHeader = {};
 let baseHost = '';
+let globalParams = {};
+let globalQuery = {};
 
 const responseMiddleware = (response) => {
   return response;
@@ -15,12 +17,21 @@ const headersToObject = (headers) => {
     return Array.from(headers.keys()).reduce((previous, currentKey) => {
       previous[currentKey] = headers.get(currentKey);
       return previous;
-    }, {})
+    }, {});
   })() : headers;
+};
+
+const urlParamsReg = new RegExp(/(:([a-zA-Z0-9-_]{1,}))/g);
+
+const formatParams = (url, params = {}) => {
+  return url.replace(urlParamsReg, (rk, ____, k) => params[k] || rk);
 };
 
 const parseUrl = (url, options, baseHost) => {
   const { ssl, method, query } = options;
+
+  url = formatParams(url, options.params = {});
+
   if (typeof baseHost === 'function') {
     return baseHost(url, options);
   }
@@ -32,7 +43,7 @@ const parseUrl = (url, options, baseHost) => {
     url = `${ssl ? 'https' : 'http'}:${url}`;
   }
   if (query) {
-    url += `${url.match(/\?/) ? '&' : '?'}${qs.stringify(query)}`
+    url += `${url.match(/\?/) ? '&' : '?'}${qs.stringify(query)}`;
   }
 
   return url;
@@ -49,6 +60,13 @@ const parseRequest = (url, options = { method: 'GET' }) => {
   if (!isGet && !options.body && options.data) {
     options.body = options.data;
   }
+  if (isGet && options.body) {
+    console.warn(`[Autofetch]: Request with GET/HEAD method cannot have body, ingored.`);
+    options.body = null;
+  }
+
+  options.params = Object.assign({}, globalParams, options.params);
+  options.query = Object.assign({}, globalQuery, options.query);
 
   const headers = new Headers(Object.assign({}, headersToObject(globalHeader), headersToObject(options.headers)));
 
@@ -102,6 +120,18 @@ const fetchDecorator = (realFetch) => {
     globalHeader = header;
 
     delete fetchRequest.headers;
+  };
+
+  fetchRequest.params = (params) => {
+    globalParams = params;
+
+    delete  fetchRequest.params;
+  };
+
+  fetchRequest.query = (query) => {
+    globalQuery = query;
+
+    delete  fetchRequest.query;
   };
 
   return fetchRequest;
