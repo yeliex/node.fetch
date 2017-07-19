@@ -30,7 +30,7 @@ const formatParams = (url, params = {}) => {
 const parseUrl = (url, options, baseHost) => {
   const { ssl, method, query } = options;
 
-  url = formatParams(url, options.params = {});
+  url = formatParams(url, options.params);
 
   if (typeof baseHost === 'function') {
     return baseHost(url, options);
