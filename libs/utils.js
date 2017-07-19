@@ -63,7 +63,9 @@ const parseRequest = (url, options = { method: 'GET' }) => {
     options.body = options.data;
   }
   if (isGet && options.body) {
-    console.warn(`[Autofetch]: Request with GET/HEAD method cannot have body, ingored.`);
+    if ((typeof options.body === 'object' && Object.keys(options.body).length > 0) || options.body.length > 0) {
+      console.warn(`[Autofetch]: Request with GET/HEAD method cannot have body, ingored.`);
+    }
     delete options.body;
   }
 
