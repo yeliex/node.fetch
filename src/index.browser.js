@@ -1,4 +1,5 @@
-const realFetch = require('../libs/fetch');
+require('../libs/fetch');
+const realFetch = self.fetch.bind(self);
 
 const { fetchDecorator } = require('./../libs/utils');
 
