@@ -1,4 +1,4 @@
-const realFetch = require('isomorphic-fetch/fetch-npm-browserify.js');
+const realFetch = require('../libs/fetch');
 
 const { fetchDecorator } = require('./../libs/utils');
 
