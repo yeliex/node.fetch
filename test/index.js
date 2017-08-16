@@ -1,7 +1,7 @@
 const child_process = require('child_process');
 const assert = require('assert');
 const utils = require('./utils');
-require('../src/inde.node');
+require('../src/index.node');
 
 describe('Initial test', () => {
   it('start server', () => {

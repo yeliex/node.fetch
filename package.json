@@ -6,8 +6,8 @@
   "browser": "dist/index.browser.js",
   "scripts": {
     "build": "webpack --config=scripts/webpack.config.js",
-    "prepublish": "npm run build",
-    "publish": "rm -rf dist/",
+    "prepublishOnly": "npm run build",
+    "publishOnly": "rm -rf dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -46,8 +46,7 @@
     "webpack": "^1.13.2"
   },
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "node-fetch": "^1.6.3",
+    "node-fetch": "2",
     "qs": "^6.3.0"
   }
 }
