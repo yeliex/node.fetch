@@ -7,6 +7,7 @@ let globalHeader = {};
 let baseHost = '';
 let globalParams = {};
 let globalQuery = {};
+let globalDebug = false;
 
 const responseMiddleware = (response) => {
   return response;
@@ -52,6 +53,8 @@ const parseUrl = (url, options, baseHost) => {
 const parseRequest = (url, options = { method: 'GET' }) => {
   options.method = (options.method || 'GET').toUpperCase();
 
+  const debug = options.debug === false ? false : options.debug || globalDebug;
+
   const isGet = options.method === 'GET' || options.method === 'HEAD';
 
   options.json = options.json === false ? options.json : true;
@@ -92,6 +95,12 @@ const parseRequest = (url, options = { method: 'GET' }) => {
   }
 
   options.headers = headers;
+
+  const realUrl = parseUrl(url, options, baseHost);
+
+  if (debug) {
+    console.log(`[autofetch][${options.method.toUpperCase()}] ${url} => ${url} ${options.body ? JSON.stringify(options.body) : ''}`);
+  }
 
   return [
     parseUrl(url, options, baseHost),
@@ -136,6 +145,12 @@ const fetchDecorator = (realFetch) => {
     globalQuery = query;
 
     delete  fetchRequest.query;
+  };
+
+  fetchRequest.debug = (debug) => {
+    globalDebug = debug;
+
+    delete fetchRequest.debug;
   };
 
   return fetchRequest;
