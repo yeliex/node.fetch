@@ -1,5 +1,7 @@
 # autoFetch
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/yeliex/autofetch.svg)](https://greenkeeper.io/)
+
 [![npm](https://img.shields.io/npm/v/autofetch.svg?style=flat-square)](https://www.npmjs.com/package/autofetch)
 
 fetch api with customer auto pre actions
